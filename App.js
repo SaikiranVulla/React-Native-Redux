@@ -11,7 +11,8 @@ import {
 import DrawerNavigation from './Screen/Navigation/DrawerNavigation';
 import {EventRegister} from 'react-native-event-listeners';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { NotificationServices, requestUserPermission } from './Utils/PushNotification';
+import ForeGroundHandler from './Utils/ForeGroundHandler';
 
 const App = () => {
   const [darkApp, setDarkApp] = useState(false);
@@ -20,6 +21,8 @@ const App = () => {
   console.log(darkApp, 'darkApp');
 
   useEffect(() => {
+    NotificationServices()
+    requestUserPermission()
     getAsyncValue();
     let eventListener = EventRegister.addEventListener(
       'changeThemeEvent',
@@ -44,6 +47,8 @@ const App = () => {
     }
   };
   return (
+    <>
+    <ForeGroundHandler/>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <NavigationContainer theme={appTheme}>
@@ -51,6 +56,8 @@ const App = () => {
         </NavigationContainer>
       </PersistGate>
     </Provider>
+    </>
+    
   );
 };
 
