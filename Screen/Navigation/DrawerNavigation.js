@@ -21,6 +21,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeTheme} from '../../Redux/Theme/ThemeActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {EventRegister} from 'react-native-event-listeners';
 
 const Drawer = createDrawerNavigator();
 
@@ -33,12 +34,6 @@ const DrawerNavigation = () => {
   console.log(theme, 'drawerNavigation');
 
   const CustomDrawerContent = props => {
-    const toggleSwitch = () => {
-      setIsEnabled(!isEnabled);
-      dispatch(changeTheme(!isEnabled));
-      AsyncStorage.setItem("theme",  JSON.stringify(!isEnabled));
-    };
-
     return (
       <DrawerContentScrollView style={{backgroundColor: '#C2CDA5'}}>
         <View style={{marginTop: 40, alignItems: 'center'}}>
@@ -80,19 +75,23 @@ const DrawerNavigation = () => {
             trackColor={{false: '#767577', true: '#81b0ff'}}
             thumbColor={'#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
+            onValueChange={val => {
+              EventRegister.emit('changeThemeEvent', val);
+              setIsEnabled(val);
+            }}
             value={isEnabled}
           />
         </View>
       </DrawerContentScrollView>
     );
   };
+
   return (
     <Drawer.Navigator
       screenOptions={({navigation}) => ({
         headerStyle: {
           backgroundColor: '#45B5AA',
-          height: 50,
+          height: 80,
         },
         headerLeft: () => (
           <TouchableOpacity

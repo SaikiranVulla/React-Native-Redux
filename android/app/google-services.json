@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "230979200355",
+    "project_id": "testingredux-d677c",
+    "storage_bucket": "testingredux-d677c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230979200355:android:02855691848bbeaa8d1f56",
+        "android_client_info": {
+          "package_name": "com.texting_redux"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230979200355-a16vvu9mu6hasf1sj69d5q6bkbsj6ia1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWuE1fCsKQP4MCz7-GZdy1blCLR7u7KN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230979200355-a16vvu9mu6hasf1sj69d5q6bkbsj6ia1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
