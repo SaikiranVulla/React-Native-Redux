@@ -11,18 +11,23 @@ import {
 import DrawerNavigation from './Screen/Navigation/DrawerNavigation';
 import {EventRegister} from 'react-native-event-listeners';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NotificationServices, requestUserPermission } from './Utils/PushNotification';
+import {
+  NotificationServices,
+  requestUserPermission,
+} from './Utils/PushNotification';
 import ForeGroundHandler from './Utils/ForeGroundHandler';
+import MainNavigation from './Screen/Navigation/MainNavigation';
 
 const App = () => {
   const [darkApp, setDarkApp] = useState(false);
+  const [exitUserId, setExitUserId] = useState();
   const appTheme = darkApp ? DarkTheme : DefaultTheme;
 
   console.log(darkApp, 'darkApp');
 
   useEffect(() => {
-    NotificationServices()
-    requestUserPermission()
+    NotificationServices();
+    requestUserPermission();
     getAsyncValue();
     let eventListener = EventRegister.addEventListener(
       'changeThemeEvent',
@@ -38,6 +43,9 @@ const App = () => {
   }, []);
 
   const getAsyncValue = async () => {
+    const userID = await AsyncStorage.getItem('isSigned');
+    console.log(userID, 'Signed');
+    setExitUserId(userID);
     if (darkApp == undefined) {
       const getThemeValue = await AsyncStorage.getItem('SetThemeValue');
       console.log('HII', getThemeValue);
@@ -48,16 +56,23 @@ const App = () => {
   };
   return (
     <>
-    <ForeGroundHandler/>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <NavigationContainer theme={appTheme}>
-          <DrawerNavigation />
-        </NavigationContainer>
-      </PersistGate>
-    </Provider>
+      <ForeGroundHandler />
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <NavigationContainer theme={appTheme}>
+            {exitUserId ? (
+              <>
+                <MainNavigation />
+              </>
+            ) : (
+              <>
+                <MainNavigation />
+              </>
+            )}
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
     </>
-    
   );
 };
 
