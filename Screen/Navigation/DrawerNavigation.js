@@ -1,10 +1,12 @@
 import {
+  Image,
   Pressable,
   StyleSheet,
   Switch,
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -22,6 +24,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {changeTheme} from '../../Redux/Theme/ThemeActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {EventRegister} from 'react-native-event-listeners';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import FontIcon from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import auth from '@react-native-firebase/auth';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,15 +36,66 @@ const DrawerNavigation = () => {
   const navigation = useNavigation();
   const theme = useSelector(state => state.ThemeReducer);
   const dispatch = useDispatch();
+  const registedDetails = useSelector(
+    state => state.UserReducer.registeredUser,
+  );
+  console.log(registedDetails, 'registedDetails');
 
   console.log(theme, 'drawerNavigation');
 
+  const logout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure? You want to logout?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            return null;
+          },
+        },
+        {
+          text: 'Confirm',
+          onPress: () => {
+            auth()
+              .signOut()
+              .then(() => navigation.navigate('LoginStack'))
+              .catch(error => {
+                console.log(error);
+                if (error.code === 'auth/no-current-user')
+                  navigation.navigate('LoginStack');
+                else alert(error);
+              });
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   const CustomDrawerContent = props => {
     return (
-      <DrawerContentScrollView style={{backgroundColor: '#C2CDA5'}}>
-        <View style={{marginTop: 40, alignItems: 'center'}}>
-          <Text>Profile Pic</Text>
+      <DrawerContentScrollView style={{flex: 1, backgroundColor: '#C2CDA5'}}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginTop: 8,
+            marginRight: 10,
+          }}>
+          <FontIcon name="edit" size={22} color="#ffffff" />
+        </TouchableOpacity>
+        <View style={{marginTop: 10, alignItems: 'center', marginBottom: 10}}>
+          <Image
+            source={require('../../assets/user.jpg')}
+            style={{width: 150, height: 150, borderRadius: 75}}
+          />
+          <Text style={{fontSize: 20, fontWeight: '700', color: '#fff'}}>
+            {registedDetails?.displayName}
+          </Text>
         </View>
+
         {Object.entries(props.descriptors).map(([key, descriptor], index) => {
           const focused = index === props.state.index;
           return (
@@ -81,6 +138,22 @@ const DrawerNavigation = () => {
             }}
             value={isEnabled}
           />
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            marginHorizontal: 20,
+            marginTop: 15,
+            justifyContent: 'space-between',
+          }}>
+          <Text>SignOut</Text>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={{marginRight: 10}}
+            onPress={() => logout()}>
+            <MaterialIcon name="logout" size={22} color="red" />
+          </TouchableOpacity>
         </View>
       </DrawerContentScrollView>
     );

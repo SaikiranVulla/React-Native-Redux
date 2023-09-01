@@ -1,5 +1,9 @@
 import axios from 'axios';
-import {ADD_CURRENT_USER_ID, SET_CURRENT_USER} from './ActionsType';
+import {
+  ADD_CURRENT_USER_ID,
+  SET_CURRENT_USER,
+  REGISTERED_USER,
+} from './ActionsType';
 
 export const addCurrentUserId = id => ({
   type: ADD_CURRENT_USER_ID,
@@ -45,3 +49,8 @@ export const differentUser = () => {
     }
   };
 };
+
+export const setRegisteredUser = userData => ({
+  type: REGISTERED_USER,
+  payload: userData,
+});
