@@ -1,15 +1,17 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Button, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import UpdatedComponent from '../../../HOC/ClickingComponent';
 
 const Stack = createNativeStackNavigator();
 
-const Book = () => {
+const Book = ({counter, handleClicking}) => {
   return (
     <View>
       <Text>BookStackNavigator</Text>
-      <Icon name='home' size={24}/>
+      <Button onPress={() => handleClicking()} title="Increase Count" />
+      <Text>Counter : {counter}</Text>
     </View>
   );
 };
@@ -22,6 +24,6 @@ const BookStackNavigator = () => {
   );
 };
 
-export default BookStackNavigator;
+export default UpdatedComponent(BookStackNavigator);
 
 const styles = StyleSheet.create({});

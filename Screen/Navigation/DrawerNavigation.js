@@ -28,6 +28,7 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import auth from '@react-native-firebase/auth';
+import NotificationScreen from '../NotificationScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -185,9 +186,9 @@ const DrawerNavigation = () => {
           headerTitle: 'Game Over',
           title: 'Home',
           headerRight: () => (
-            <View style={styles.headerRight}>
+            <TouchableOpacity style={styles.headerRight} onPress={()=>navigation.navigate('Notification')}>
               <Icon name="bell" size={20} color="#fff" />
-            </View>
+            </TouchableOpacity>
           ),
         }}
       />
@@ -204,6 +205,13 @@ const DrawerNavigation = () => {
         component={LocationStackNavigator}
         options={{
           title: 'Locations',
+        }}
+      />
+      <Drawer.Screen
+        name="Notification"
+        component={NotificationScreen}
+        options={{
+          title: 'Notifications',
         }}
       />
     </Drawer.Navigator>
